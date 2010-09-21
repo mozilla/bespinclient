@@ -37,7 +37,7 @@
 
 "define metadata";
 ({
-    "dependencies": { "jslint": "0.0.0" },
+    "dependencies": { "file_commands": "0.0.0", "jslint": "0.0.0" },
     "description": "Provides the JSLint command to check code for errors.",
     "objects": [],
     "provides": [
@@ -48,6 +48,12 @@
             "description": "Run JSLint to check the current file",
             "pointer": "#jslintCommand",
             "predicates": { "context": "js" }
+        },
+        {
+            "ep": "savehook",
+            "name": "jslint",
+            "description": "Runs JSLint when a JavaScript file is saved",
+            "pointer": "#jslintSaveHook"
         }
     ]
 });
@@ -98,6 +104,15 @@ function runJSLint(model) {
 
 exports.jslintCommand = function(args, req) {
     req.done(runJSLint(env.model));
+}
+
+exports.jslintSaveHook = function(file) {
+    var extension = file.extension();
+    if (extension !== "js" && extension !== "jsm") {
+        return "";
+    }
+
+    return runJSLint(env.model);
 }
 
 exports.runJSLint = runJSLint;
