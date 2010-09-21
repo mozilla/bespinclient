@@ -198,10 +198,10 @@ exports.whiteTheme = function() {
             },
 
             highlighterBG: {
-                plain:      'rgb(0, 0, 0, 0)",
+                plain:      'rgb(0, 0, 0, 0)',
                 addition:   '#008000',
                 deletion:   '#800000'
-            }
+            },
 
             // Variables for the scrollers.
             scroller: {
