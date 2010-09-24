@@ -37,7 +37,7 @@
 
 "define metadata";
 ({
-    "dependencies": { "file_commands": "0.0.0", "jslint": "0.0.0" },
+    "dependencies": { "jslint": "0.0.0", "notifier": "0.0.0" },
     "description": "Provides the JSLint command to check code for errors.",
     "objects": [],
     "provides": [
@@ -47,6 +47,7 @@
             "params": [],
             "description": "Run JSLint to check the current file",
             "pointer": "#jslintCommand",
+            "key": "ctrl_shift_v",
             "predicates": { "context": "js" }
         },
         {
@@ -54,6 +55,12 @@
             "name": "jslint",
             "description": "Runs JSLint when a JavaScript file is saved",
             "pointer": "#jslintSaveHook"
+        },
+        {
+            "ep": "notification",
+            "name": "jslint_error",
+            "description": "JSLint errors",
+            "level": "error"
         }
     ]
 });
@@ -61,6 +68,7 @@
 
 var env = require('environment').env;
 var jslint = require('jslint').jslint;
+var catalog = require("bespin:plugins").catalog;
 
 function runJSLint(model) {
     var ok = jslint(model.getValue());
@@ -70,8 +78,8 @@ function runJSLint(model) {
 
     var errors = jslint.errors;
     var plural = (errors.length === 1) ? "" : "s";
-    var output = [ "<div>JSLint reported ", errors.length, " error", plural,
-        ":</div>" ];
+    var message = "JSLint reported " + errors.length + " error" + plural;
+    var output = [ "<div>", message, ":</div>" ];
 
     errors.forEach(function(err) {
         if (err == null) {
@@ -98,13 +106,24 @@ function runJSLint(model) {
         }
         output.push('^</pre>');
     });
+    
+    if (errors[errors.length-1] === null) {
+        var notifier = catalog.getObject('notifier');
+        if (notifier) {
+            notifier.notify({
+                plugin: 'jslint_command',
+                notification: 'jslint_error',
+                body: message
+            });
+        }
+    }
 
     return output.join("");
-}
+};
 
 exports.jslintCommand = function(args, req) {
     req.done(runJSLint(env.model));
-}
+};
 
 exports.jslintSaveHook = function(file) {
     var extension = file.extension();
@@ -113,7 +132,7 @@ exports.jslintSaveHook = function(file) {
     }
 
     return runJSLint(env.model);
-}
+};
 
 exports.runJSLint = runJSLint;
 
