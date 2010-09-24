@@ -36,6 +36,7 @@
  * ***** END LICENSE BLOCK ***** */
 
 var $ = require('jquery').$;
+var _ = require('underscore')._;
 var settings = require('settings').settings;
 var group = require("bespin:promise").group;
 var Promise = require("bespin:promise").Promise;
@@ -335,7 +336,9 @@ var generateGUI = function(catalog, config, pr) {
     // Add the 'bespin' class to the element in case it doesn't have this already.
     util.addClass(element, 'bespin');
     element.appendChild(container);
-    
+
+    var elementAppendedQueue = [];
+
     // this shouldn't be necessary, but it looks like Firefox has an issue
     // with the box-ordinal-group CSS property
     ['north', 'west', 'center', 'east', 'south'].forEach(function(place) {
@@ -374,11 +377,13 @@ var generateGUI = function(catalog, config, pr) {
             container.appendChild(element);
         }
 
-        // Call the elementAppended event if there is one.
-        if (component.elementAppended) {
-            component.elementAppended();
+        // Queue up the "elementAppended" event, if the component has one.
+        if (component.elementAppended != null) {
+            elementAppendedQueue.push(component);
         }
     });
+
+    _(elementAppendedQueue).invoke('elementAppended');
 
     pr.resolve();
 };
