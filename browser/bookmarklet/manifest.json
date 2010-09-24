@@ -1,5 +1,5 @@
 {
-    "plugins": ["embedded", "js_syntax", "stylesheet", "html", "whitetheme",
+    "plugins": ["embedded", "js_syntax", "diff_syntax", "stylesheet", "html", "whitetheme",
                 "bookmarkletui", "templater"],
     "config": {
         "objects": {
