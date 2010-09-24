@@ -337,53 +337,58 @@ var generateGUI = function(catalog, config, pr) {
     util.addClass(element, 'bespin');
     element.appendChild(container);
 
-    var elementAppendedQueue = [];
-
-    // this shouldn't be necessary, but it looks like Firefox has an issue
-    // with the box-ordinal-group CSS property
-    ['north', 'west', 'center', 'east', 'south'].forEach(function(place) {
-        var descriptor = config.gui[place];
-        if (!descriptor) {
-            return;
-        }
-
-        var component = catalog.getObject(descriptor.component);
-        if (!component) {
-            error = 'Cannot find object ' + descriptor.component +
-                            ' to attach to the Bespin UI';
-            console.error(error);
-            pr.reject(error);
-            return;
-        }
-
-        element = component.element;
-        if (!element) {
-            error = 'Component ' + descriptor.component + ' does not have' +
-                          ' an "element" attribute to attach to the Bespin UI';
-            console.error(error);
-            pr.reject(error);
-            return;
-        }
-
-        $(element).addClass(place);
-
-        if (place == 'west' || place == 'east' || place == 'center') {
-            if (!centerAdded) {
-                container.appendChild(centerContainer);
-                centerAdded = true;
+    try {
+        // this shouldn't be necessary, but it looks like Firefox has an issue
+        // with the box-ordinal-group CSS property
+        ['north', 'west', 'center', 'east', 'south'].forEach(function(place) {
+            var descriptor = config.gui[place];
+            if (!descriptor) {
+                return;
             }
-            centerContainer.appendChild(element);
-        } else {
-            container.appendChild(element);
-        }
 
-        // Queue up the "elementAppended" event, if the component has one.
-        if (component.elementAppended != null) {
-            elementAppendedQueue.push(component);
-        }
-    });
+            var component = catalog.getObject(descriptor.component);
+            if (!component) {
+                throw 'Cannot find object ' + descriptor.component +
+                                ' to attach to the Bespin UI';
+            }
 
-    _(elementAppendedQueue).invoke('elementAppended');
+            element = component.element;
+            if (!element) {
+                throw 'Component ' + descriptor.component + ' does not ' +
+                            'have an "element" attribute to attach to the ' +
+                            'Bespin UI';
+            }
 
-    pr.resolve();
+            $(element).addClass(place);
+
+            if (place == 'west' || place == 'east' || place == 'center') {
+                if (!centerAdded) {
+                    container.appendChild(centerContainer);
+                    centerAdded = true;
+                }
+                centerContainer.appendChild(element);
+            } else {
+                container.appendChild(element);
+            }
+        });
+
+        // Call the "elementAppended" callbacks.
+        ['north', 'west', 'east', 'south', 'center'].forEach(function(place) {
+            var descriptor = config.gui[place];
+            if (!descriptor) {
+                return;
+            }
+
+            var component = catalog.getObject(descriptor.component);
+            if (component.elementAppended != null) {
+                component.elementAppended();
+            }
+        });
+
+        pr.resolve();
+    } catch (e) {
+        console.error(e);
+        pr.reject(e);
+    }
+
 };
