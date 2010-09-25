@@ -69,29 +69,6 @@ var getCSSProperty = function(element, container, property) {
     return ret;
 };
 
-/**
- * Returns the sum of all passed property values. Calls internal getCSSProperty
- * to get the value of the individual peroperties.
-  */
-// var sumCSSProperties = function(element, container, props) {
-//     var ret = document.defaultView.getComputedStyle(element, '').
-//                                         getPropertyValue(props[0]);
-//
-//     if (!ret || ret == 'auto' || ret == 'intrinsic') {
-//         return container.style[props[0]];
-//     }
-//
-//     var sum = props.map(function(item) {
-//         var cssProp = getCSSProperty(element, container, item);
-//         // Remove the 'px; and parse the property to a floating point.
-//         return parseFloat(cssProp.replace('px', ''));
-//     }).reduce(function(a, b) {
-//         return a + b;
-//     });
-//
-//     return sum;
-// };
-
 bespin.useBespin = function(element, options) {
     var util = bespin.tiki.require('bespin:util/util');
 
@@ -168,12 +145,6 @@ bespin.useBespin = function(element, options) {
 
                 // The complete width is the width of the textarea + the padding
                 // to the left and right.
-                // var width = sumCSSProperties(element, container, [
-                //     'width', 'padding-left', 'padding-right'
-                // ]) + 'px';
-                // var height = sumCSSProperties(element, container, [
-                //     'height', 'padding-top', 'padding-bottom'
-                // ]) + 'px';
                 var width = getCSSProperty(element, container, 'width');
                 var height = getCSSProperty(element, container, 'height');
                 style += 'height:' + height + ';width:' + width + ';';
