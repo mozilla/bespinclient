@@ -198,7 +198,7 @@ exports.whiteTheme = function() {
             },
 
             highlighterBG: {
-                plain:      'rgb(0, 0, 0, 0)',
+                plain:      '#ffffff',
                 addition:   '#008000',
                 deletion:   '#800000'
             },

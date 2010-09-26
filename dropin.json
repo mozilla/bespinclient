@@ -1,5 +1,5 @@
 {
-    "plugins": ["embedded", "html", "stylesheet", "js_syntax"],
+    "plugins": ["embedded", "html", "stylesheet", "js_syntax", "whitetheme"],
     "output_dir": "tmp/BespinDropIn",
     "include_sample": true
 }
