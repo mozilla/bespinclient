@@ -5,6 +5,16 @@ title: Bespin 0.9 ("Edison") Release Notes
 
 [Up](index.html) - Next Release - [Previous Release](notes08.html)
 
+0.9a2 (September 29, 2010) Changes
+----------------------------------
+
+* New jslint\_command plugin. ctrl-shift-V or "jslint" from the command line
+  will check your code. It will notify if there are any errors.
+* The diff highlighter is now included in the bookmarklet
+* console logging within Bespin now works with the Firefox 4 Web Console
+* Updated to a newer Traits.js for Chrome 6+ compatibility
+* Other minor fixes
+
 Important Changes
 -----------------
 
