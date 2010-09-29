@@ -437,16 +437,19 @@
             "ep": "themevariable",
             "name": "highlighterFG",
             "defaultValue": {
-                "plain":      "#e6e6e6",
-                "comment":    "#666666",
-                "directive":  "#999999",
-                "error":      "#ff0000",
-                "identifier": "#D841FF",
-                "keyword":    "#42A8ED",
-                "operator":   "#88BBFF",
-                "string":     "#039A0A",
-                "addition":   "#FFFFFF",
-                "deletion":   "#FFFFFF"
+                "plain":            "#e6e6e6",
+                "comment":          "#666666",
+                "directive":        "#999999",
+                "error":            "#ff0000",
+                "identifier":       "#D841FF",
+                "keyword":          "#42A8ED",
+                "operator":         "#88BBFF",
+                "string":           "#039A0A",
+                "addition":         "#FFFFFF",
+                "deletion":         "#FFFFFF",
+                "builtin":          "#307BAD",
+                "module":           "#BA4946",
+                "specialmodule":    "#C741BB"
             }
         },
         {
